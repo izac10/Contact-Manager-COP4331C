@@ -1,0 +1,192 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: url("/images/1359447.png") repeat;
+  background-color: black;
+  background-size: 150% 150%;
+  animation: drift 40s ease-in-out infinite;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+/* Moving background animation */
+@keyframes drift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Citronaut Logo - GitHub link */
+.circle-crop {
+  width: 90px;
+  height: 90px;
+  overflow: hidden;
+  border-radius: 50%;
+  position: absolute;
+  top: 18%;
+  right: 8%;
+  z-index: 1000;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  animation: spin 30s linear infinite;
+}
+
+.circle-crop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Shared style for title container */
+.title-container-style {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 40px;
+  padding: 20px 40px;
+  border: 2px solid rgba(255, 8, 144, 0.7);
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 30px rgba(255, 8, 144, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+.title-container1 {
+  max-width: 700px;
+  margin-top: 80px;
+}
+
+.title-container2 {
+  max-width: 500px;
+}
+
+/* Shared style for title */
+.title-style {
+  font-family: "Orbitron", sans-serif;
+  font-weight: 500;
+  font-size: clamp(20px, 4vw, 40px);
+  text-align: center;
+  color: transparent;
+  -webkit-text-stroke: 2px rgb(227, 135, 186);
+  text-transform: uppercase;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid rgb(255, 8, 144);
+}
+
+.title1 {
+  animation: typing 3s steps(22) forwards, cursor 0.5s step-end 3 forwards;
+}
+
+.title2 {
+  width: 0;
+  animation: typing 3s steps(22) forwards 1.8s,
+    cursor 0.5s step-end 4 forwards 3s;
+}
+
+/* This will be for typing effect */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 22ch;
+  }
+}
+
+/* Cursor blink */
+@keyframes cursor {
+  50% {
+    border-color: transparent;
+  }
+  100% {
+    border-color: transparent;
+  }
+}
+
+.spaceship-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
+}
+
+.spaceship-img img {
+  width: 100%;
+  max-width: 200px;
+  height: 190px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 20px rgba(255, 8, 144, 0.3));
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Floating animation for spaceship */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-25px);
+  }
+}
+
+/* Launching animation for spaceship */
+@keyframes launch {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(-200px) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-1000px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.text-under-spaceship{
+    font-size: 20px;
+    padding-bottom: 30px;
+    border-right: none;
+    -webkit-text-stroke: 2px rgb(3, 238, 255);
+    text-shadow: 
+    0 0 5px black,
+    0 0 10px black,
+    0 0 20px black;
+}
+
+.launching {
+  animation: launch 1.5s ease-in forwards;
+}
