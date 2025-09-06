@@ -1,3 +1,4 @@
+console.log("code.js loaded");
 const urlBase = 'http://small-project-team6.online/LAMPAPI';
 const extension = 'php';
 
@@ -46,7 +47,7 @@ function doLogin()
 
 				saveCookie();
 	
-				window.location.href = "color.html";
+				window.location.href = "contact-app.html";
 			}
 		};
 		xhr.send(jsonPayload);
@@ -56,6 +57,45 @@ function doLogin()
 		document.getElementById("loginResult").innerHTML = err.message;
 	}
 
+}
+
+function doSignup()
+{
+    let firstName = document.getElementById("signupFirstName").value;
+    let lastName = document.getElementById("signupLastName").value;
+    let login = document.getElementById("signupName").value;
+    let password = document.getElementById("signupPassword").value;
+
+    document.getElementById("signupResult").innerHTML = "";
+
+    let tmp = {firstName:firstName, lastName:lastName, login:login, password:password};
+    let jsonPayload = JSON.stringify(tmp);
+
+    let url = urlBase + '/Register.' + extension;
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+    xhr.onreadystatechange = function() 
+    {
+        if (this.readyState == 4 && this.status == 200) 
+        {
+            let jsonObject = JSON.parse(xhr.responseText);
+
+            if(jsonObject.error !== "") 
+            {
+                document.getElementById("signupResult").innerHTML = jsonObject.error;
+            } 
+            else 
+            {
+                // Registration successful → switch to login form
+                switchToLogin();
+            }
+        }
+    };
+
+    xhr.send(jsonPayload);
 }
 
 function saveCookie()

@@ -38,7 +38,11 @@
 			<input type="text" id="signupLastName" placeholder="Last Name" /><br />
 			<input type="text" id="signupName" placeholder="Username" /><br />
 			<input type="password" id="signupPassword" placeholder="Password" /><br />
-		  	<button type="button" id="signupButton" class="buttons" onclick="doSignup();">Sign Up</button>
+
+			<!-- error message -->
+			<span id="signupResult" style="color:red; font-weight:bold;"></span><br />
+
+			<button type="button" id="signupButton" class="buttons" onclick="doSignup();">Sign Up</button>
 		  
 		  	<p class="switch-text"> Already have an account?
 				<button type="button" class="switch-btn" onclick="switchToLogin()">Log In</button>
