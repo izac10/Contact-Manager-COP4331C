@@ -1,40 +1,135 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Contact Manager</title>
-	<script type="text/javascript" src="js/code.js"></script>
-    <link href="css/styles.css" rel="stylesheet">	
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
-	
-	<script type="text/javascript">
-	document.addEventListener('DOMContentLoaded', function() 
-	{
-		readCookie();
-	}, false);
-	</script>
-	
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Space Contact Manager</title>
+
+  <!-- Single stylesheet for this page -->
+  <link rel="stylesheet" href="css/contact-app.css" />
+
+  <!-- App script -->
+  <script defer src="js/code.js"></script>
+
 </head>
 <body>
 
-<h1 id="title">COP 4331 LAMP Stack Demo</h1>
+	<button class="logout-btn" type="button" onclick="doLogout()" aria-label="Log out">
+		<span class="logout-icon">⎋</span> <span class="logout-text">Logout</span>
+	</button>
+  <!-- Header -->
+  <header class="title-container-style">
+    <h1 class="title-style">Contacts</h1>
+  </header>
 
-<div id="loggedInDiv">
-	<span id="userName"></span><br />
-	<button type="button" id="logoutButton" class="buttons" onclick="doLogout();"> Log Out </button>
-</div>
+  <!-- Main content -->
+  <main class="content" aria-live="polite">
+    <!-- Tools row -->
+    <section class="toolbar">
+      <div class="searchbar">
+        <span class="search-icon" aria-hidden="true">🔎</span>
+        <input
+          id="searchText"
+          class="input"
+          type="text"
+          placeholder="Search contacts"
+          onkeyup="searchContacts()"
+          aria-label="Search contacts"
+        />
+        <button class="buttons" type="button" onclick="searchContacts()">Search</button>
+      </div>
 
-<div id="accessUIDiv">
-	<br />
+      <button class="iconBtn" type="button" title="Refresh" onclick="loadContacts()">⟲</button>
+      <button class="iconBtn" type="button" title="Add Contact" onclick="toggleAddForm()">＋</button>
+    </section>
 
-	<input type="text" id="searchText" placeholder="Color To Search For"/>
-	<button type="button" id="searchColorButton" class="buttons" onclick="searchColor();"> Search Color </button><br />
-	<span id="colorSearchResult"></span>
-	<p id="colorList">
-	</p><br /><br />
 
-	<input type="text" id="colorText" placeholder="Color To Add">
-	<button type="button" id="addColorButton" class="buttons" onclick="addColor();"> Add Color </button><br />
-	<span id="colorAddResult"></span>
-</div>
+    <!-- Add contact card -->
+    <section class="credentials-container" id="addContactSection" hidden>
+      <h2 class="credentials-title">Add a Contact</h2>
+      <form id="addMe" action="" method="post" onsubmit="return false;">
+        <div class="form-grid">
+          <label class="visually-hidden" for="contactTextFirst">First Name</label>
+          <input id="contactTextFirst" type="text" placeholder="First Name" required />
 
+          <label class="visually-hidden" for="contactTextLast">Last Name</label>
+          <input id="contactTextLast" type="text" placeholder="Last Name" required />
+
+          <label class="visually-hidden" for="contactTextEmail">Email</label>
+          <input
+            id="contactTextEmail"
+            type="email"
+            placeholder="name@email.com"
+            pattern="^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$"
+            required
+          />
+
+          <label class="visually-hidden" for="contactTextNumber">Phone</label>
+          <input
+            id="contactTextNumber"
+            type="text"
+            placeholder="XXX-XXX-XXXX"
+            pattern="^[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$"
+            title="Enter a valid US phone number"
+            required
+          />
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="buttons" onclick="addContact()">Add Contact</button>
+          <button type="button" class="buttons secondary" onclick="toggleAddForm()">Close</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Table card -->
+    <section class="table-wrap">
+      <table id="contacts" aria-describedby="contactsCaption">
+        <caption id="contactsCaption" class="visually-hidden">Your contacts</caption>
+        <thead>
+          <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col" class="col-actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"><!-- populated by loadContacts() --></tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="footer">
+	<h2 class="footer-title">
+	  <button class="footer-toggle title-style" id="teamToggle"
+			  aria-expanded="false" aria-controls="teamMembers">
+		Meet the Team
+	  </button>
+	</h2>
+  
+	<div id="teamMembers" class="team-members">
+	  <a href="https://www.linkedin.com/in/angel-hernandez-salas" target="_blank" rel="noopener noreferrer" class="member-card">
+		<h3 class="member-name">Angel Hernandez</h3>
+		<p class="member-role">Frontend</p>
+	  </a>
+  
+	  <div class="member-card">
+		<h3 class="member-name">Paola Bayona</h3>
+		<p class="member-role">Project Manager/API</p>
+	  </div>
+  
+	  <div class="member-card">
+		<h3 class="member-name">Shahana Nizar</h3>
+		<p class="member-role">Database</p>
+	  </div>
+  
+	  <div class="member-card">
+		<h3 class="member-name">Janhvi Bilagi</h3>
+		<p class="member-role">API</p>
+	  </div>
+	</div>
+  </footer>
+  
 </body>
 </html>
