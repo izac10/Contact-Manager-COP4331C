@@ -98,6 +98,99 @@ function doSignup()
     xhr.send(jsonPayload);
 }
 
+function addContact() {
+	let firstName = document.getElementById("contactTextFirst").value.trim();
+	let lastName = document.getElementById("contactTextLast").value.trim();
+	let email = document.getElementById("contactTextEmail").value.trim();
+	let phone = document.getElementById("contactTextNumber").value.trim();
+  
+	// Clear result area (we can add a <div id="contactAddResult"> later if needed)
+	console.log("Adding contact:", firstName, lastName, email, phone);
+  
+	let tmp = {
+	  FirstName: firstName,
+	  LastName: lastName,
+	  Email: email,
+	  Phone: phone,
+	  UserId: userId
+	};
+  
+	let jsonPayload = JSON.stringify(tmp);
+  
+	let url = urlBase + '/Add_Contact.' + extension;
+  
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+  
+	try {
+	  xhr.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+		  console.log("Response:", xhr.responseText);
+		  let jsonObject = JSON.parse(xhr.responseText);
+  
+		  if (jsonObject.error && jsonObject.error !== "") {
+			alert("Error: " + jsonObject.error);
+			return;
+		  }
+  
+		  alert("Contact added successfully!");
+		  loadContacts();  // refresh the table
+		  toggleAddForm(); // hide the form
+		}
+	  };
+	  xhr.send(jsonPayload);
+	}
+	catch(err) {
+	  alert("Error: " + err.message);
+	}
+}
+  
+function loadContacts() {
+	let tmp = { search: "", userId: userId }; // empty search loads all
+	let jsonPayload = JSON.stringify(tmp);
+  
+	let url = urlBase + '/SearchContacts.' + extension;
+  
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+  
+	try {
+	  xhr.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+		  console.log("Contacts:", xhr.responseText);
+		  let jsonObject = JSON.parse(xhr.responseText);
+  
+		  let tbody = document.getElementById("tbody");
+		  tbody.innerHTML = "";
+  
+		  if (jsonObject.results && jsonObject.results.length > 0) {
+			jsonObject.results.forEach(contact => {
+			  let row = document.createElement("tr");
+  
+			  row.innerHTML = `
+				<td>${contact.FirstName}</td>
+				<td>${contact.LastName}</td>
+				<td>${contact.Email}</td>
+				<td>${contact.Phone}</td>
+				<td>
+				  <button onclick="deleteContact(${contact.ID})">Delete</button>
+				</td>
+			  `;
+  
+			  tbody.appendChild(row);
+			});
+		  }
+		}
+	  };
+	  xhr.send(jsonPayload);
+	}
+	catch(err) {
+	  console.log("Error:", err.message);
+	}
+}
+  
 function saveCookie()
 {
 	let minutes = 20;
