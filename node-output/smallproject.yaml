@@ -1,0 +1,265 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "The API for Contacts Manager for COP4331",
+    "version" : "1.0.0",
+    "title" : "Contact Manager Team 6",
+    "contact" : {
+      "email" : "ja240277@ucf.edu"
+    },
+    "license" : {
+      "name" : "Apache 2.0"
+    }
+  },
+  "host" : "small-project-team6.online",
+  "basePath" : "/LAMPAPI",
+  "schemes" : [ "http" ],
+  "consumes" : [ "application/json" ],
+  "produces" : [ "application/json" ],
+  "paths" : {
+    "/Login.php" : {
+      "post" : {
+        "tags" : [ "Users" ],
+        "summary" : "Logs in to the contacts app",
+        "description" : "logs in to the contacts app",
+        "operationId" : "dlLogin",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "loginItem",
+          "description" : "Login",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Login"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "ok"
+          },
+          "400" : {
+            "description" : "Bad Request - Invalid input"
+          },
+          "401" : {
+            "description" : "Unauthorized - Invalid credentials"
+          },
+          "404" : {
+            "description" : "URL Not Found"
+          },
+          "500" : {
+            "description" : "Server Error"
+          }
+        }
+      }
+    },
+    "/Add_Contact.php" : {
+      "post" : {
+        "tags" : [ "Users" ],
+        "summary" : "adds a new contact",
+        "description" : "adds a new contact into the database",
+        "operationId" : "addcontact",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "addcontactItem",
+          "description" : "Add_Contact",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Add_Contact"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "ok"
+          },
+          "400" : {
+            "description" : "Bad Request - Empty Fields"
+          },
+          "500" : {
+            "description" : "Database error message"
+          }
+        }
+      }
+    },
+    "/SearchContacts.php" : {
+      "get" : {
+        "tags" : [ "Users" ],
+        "summary" : "searches for a contact",
+        "description" : "searches for a contact in the database",
+        "operationId" : "searchcontacts",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "searchItem",
+          "description" : "SearchContacts",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/SearchContacts"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "ok"
+          },
+          "404" : {
+            "description" : "No Records Found"
+          },
+          "500" : {
+            "description" : "Database error message"
+          }
+        }
+      }
+    },
+    "/Update_Contact.php" : {
+      "post" : {
+        "tags" : [ "Users" ],
+        "summary" : "updates a contact",
+        "description" : "updates a contact in the database",
+        "operationId" : "updatecontacts",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "updateItem",
+          "description" : "Update_Contact",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Update_Contact"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "ok"
+          },
+          "500" : {
+            "description" : "Database error message"
+          }
+        }
+      }
+    },
+    "/Delete_Contact.php" : {
+      "delete" : {
+        "tags" : [ "Users" ],
+        "summary" : "deletes a contact",
+        "description" : "deletes a contact in the database",
+        "operationId" : "deletecontact",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "deleteItem",
+          "description" : "Delete_Contact",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Delete_Contact"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "ok"
+          },
+          "500" : {
+            "description" : "Database error message"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Login" : {
+      "type" : "object",
+      "required" : [ "login", "password" ],
+      "properties" : {
+        "login" : {
+          "type" : "string",
+          "example" : "fred"
+        },
+        "password" : {
+          "type" : "string",
+          "example" : "secret"
+        }
+      }
+    },
+    "Add_Contact" : {
+      "type" : "object",
+      "required" : [ "email", "firstname", "phonenumber" ],
+      "properties" : {
+        "firstname" : {
+          "type" : "string",
+          "example" : "fred"
+        },
+        "lasttname" : {
+          "type" : "string",
+          "example" : "bob"
+        },
+        "email" : {
+          "type" : "string",
+          "example" : "fred@gmail.com"
+        },
+        "phonenumber" : {
+          "type" : "integer",
+          "example" : 1234567891
+        }
+      }
+    },
+    "SearchContacts" : {
+      "type" : "object",
+      "required" : [ "email", "firstname", "phonenumber" ],
+      "properties" : {
+        "firstname" : {
+          "type" : "string",
+          "example" : "fred"
+        },
+        "lasttname" : {
+          "type" : "string",
+          "example" : "bob"
+        },
+        "email" : {
+          "type" : "string",
+          "example" : "fred@gmail.com"
+        },
+        "phonenumber" : {
+          "type" : "integer",
+          "example" : 1234567891
+        }
+      }
+    },
+    "Update_Contact" : {
+      "type" : "object",
+      "required" : [ "email", "firstname", "phonenumber", "userID" ],
+      "properties" : {
+        "firstname" : {
+          "type" : "string",
+          "example" : "fred"
+        },
+        "lasttname" : {
+          "type" : "string",
+          "example" : "bob"
+        },
+        "email" : {
+          "type" : "string",
+          "example" : "fred@gmail.com"
+        },
+        "phonenumber" : {
+          "type" : "integer",
+          "example" : 1234567891
+        },
+        "userID" : {
+          "type" : "integer",
+          "example" : 2
+        }
+      }
+    },
+    "Delete_Contact" : {
+      "type" : "object",
+      "required" : [ "userID" ],
+      "properties" : {
+        "userID" : {
+          "type" : "integer",
+          "example" : 2
+        }
+      }
+    }
+  }
+}
