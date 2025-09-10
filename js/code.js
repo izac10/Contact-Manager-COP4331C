@@ -99,6 +99,8 @@ function doSignup()
 }
 
 function addContact() {
+	readCookie(); // make sure userId is up to date
+
 	let firstName = document.getElementById("contactTextFirst").value.trim();
 	let lastName = document.getElementById("contactTextLast").value.trim();
 	let email = document.getElementById("contactTextEmail").value.trim();
@@ -107,6 +109,12 @@ function addContact() {
 	// Clear result area (we can add a <div id="contactAddResult"> later if needed)
 	console.log("Adding contact:", firstName, lastName, email, phone);
   
+	document.getElementById("addContactResult")?.remove();
+
+    let resultP = document.createElement("p");
+    resultP.id = "addContactResult";
+    document.getElementById("addContactSection").appendChild(resultP);
+
 	let tmp = {
 	  FirstName: firstName,
 	  LastName: lastName,
@@ -114,6 +122,8 @@ function addContact() {
 	  Phone: phone,
 	  UserId: userId
 	};
+
+	console.log("Payload:", tmp); // debug
   
 	let jsonPayload = JSON.stringify(tmp);
   
@@ -139,6 +149,7 @@ function addContact() {
 		  toggleAddForm(); // hide the form
 		}
 	  };
+	  console.log("Payload being sent:", jsonPayload);
 	  xhr.send(jsonPayload);
 	}
 	catch(err) {
