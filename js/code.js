@@ -1,5 +1,5 @@
 console.log("code.js loaded");
-const urlBase = 'http://small-project-team6.online/LAMPAPI';
+const urlBase = 'http://www.small-project-team6.online/LAMPAPI';
 const extension = 'php';
 
 let userId = 0;
