@@ -205,7 +205,58 @@ function loadContacts() {
         console.log("Error:", err.message);
     }
 }
-  
+
+function searchContacts() {
+    let searchText = document.getElementById("searchText").value.trim();
+
+    let tmp = { search: searchText, userId: userId };
+    let jsonPayload = JSON.stringify(tmp);
+
+    let url = urlBase + '/SearchContacts.' + extension;
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+    try {
+        xhr.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                console.log("Search results:", xhr.responseText);
+                let jsonObject = JSON.parse(xhr.responseText);
+
+                let tbody = document.getElementById("tbody");
+                tbody.innerHTML = "";
+
+                if (jsonObject.results && jsonObject.results.length > 0) {
+                    jsonObject.results.forEach(contact => {
+                        let row = document.createElement("tr");
+
+                        row.innerHTML = `
+                            <td>${contact.FirstName}</td>
+                            <td>${contact.LastName}</td>
+                            <td>${contact.Email}</td>
+                            <td>${contact.Phone}</td>
+                            <td>
+                                <button onclick="deleteContact(${contact.ID})">Delete</button>
+                            </td>
+                        `;
+
+                        tbody.appendChild(row);
+                    });
+                } else {
+                    let row = document.createElement("tr");
+                    row.innerHTML = `<td colspan="5" style="text-align:center;">No contacts found</td>`;
+                    tbody.appendChild(row);
+                }
+            }
+        };
+        xhr.send(jsonPayload);
+    }
+    catch(err) {
+        console.log("Error:", err.message);
+    }
+}
+
 function saveCookie()
 {
 	let minutes = 20;

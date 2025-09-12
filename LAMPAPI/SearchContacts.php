@@ -11,11 +11,11 @@
     } 
     else
     {
-        // Use LIKE on first and last name, plus filter by UserID
+        //first and last name
         $sql = "SELECT firstName, lastName, Email, Phone, ID 
                 FROM Contacts 
-                WHERE firstName LIKE '%" . $inData["firstName"] . "%' 
-                AND lastName LIKE '%" . $inData["lastName"] . "%' 
+                WHERE (firstName LIKE '%" . $inData["search"] . "%' 
+                    OR lastName LIKE '%" . $inData["search"] . "%')
                 AND UserID=" . $inData["userId"];
 
         $result = $conn->query($sql);
