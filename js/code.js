@@ -14,8 +14,12 @@ function doLogin()
 	
 	let login = document.getElementById("loginName").value;
 	let password = document.getElementById("loginPassword").value;
-//	var hash = md5( password );
 	
+	if (login.trim() === "" || password.trim() === "") {
+		document.getElementById("loginResult").innerHTML = "Please enter both username and password.";
+		return;
+	}
+
 	document.getElementById("loginResult").innerHTML = "";
 
 	let tmp = {login:login,password:password};
