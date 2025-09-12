@@ -187,6 +187,7 @@ function loadContacts() {
               				<td>${contact.Phone}</td>
               				<td>
                 				<button onclick="deleteContact(${contact.ID})">Delete</button>
+								<button onclick="updateContact(${contact.ID}, '${contact.FirstName}', '${contact.LastName}', '${contact.Email}', '${contact.Phone}')">Update</button>
               				</td>
             			`;
 
