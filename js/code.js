@@ -180,18 +180,33 @@ function loadContacts() {
                     jsonObject.results.forEach(contact => {
                         let row = document.createElement("tr");
 
-                        row.innerHTML = `
+						row.innerHTML = `
                             <td>${contact.FirstName}</td>
-              				<td>${contact.LastName}</td>
-           				   	<td>${contact.Email}</td>
-              				<td>${contact.Phone}</td>
-              				<td>
-                				<button onclick="deleteContact(${contact.ID})">Delete</button>
-								<button onclick="updateContact(${contact.ID}, '${contact.FirstName}', '${contact.LastName}', '${contact.Email}', '${contact.Phone}')">Update</button>
-              				</td>
-            			`;
+                            <td>${contact.LastName}</td>
+                            <td>${contact.Email}</td>
+                            <td>${contact.Phone}</td>
+                            <td></td>
+                        `;
 
-            			tbody.appendChild(row);
+						// Create Update button
+                        let updateBtn = document.createElement("button");
+                        updateBtn.textContent = "Update";
+                        updateBtn.addEventListener("click", () => {
+                            updateContact(contact.ID, contact.FirstName, contact.LastName, contact.Email, contact.Phone);
+                        });
+
+						// Create Delete button
+                        let deleteBtn = document.createElement("button");
+                        deleteBtn.textContent = "Delete";
+                        deleteBtn.addEventListener("click", () => {
+                            deleteContact(contact.ID);
+                        });
+
+						// Append buttons into the last <td>
+                        row.lastElementChild.appendChild(updateBtn);
+                        row.lastElementChild.appendChild(deleteBtn);
+            			
+						tbody.appendChild(row);
           			});
                 } else {
                     let row = document.createElement("tr");
@@ -256,6 +271,64 @@ function searchContacts() {
     catch(err) {
         console.log("Error:", err.message);
     }
+}
+
+function updateContact(contactId, firstName, lastName, email, phone) {
+  // Pre-fill the add form with existing contact info
+  document.getElementById("contactTextFirst").value = firstName;
+  document.getElementById("contactTextLast").value = lastName;
+  document.getElementById("contactTextEmail").value = email;
+  document.getElementById("contactTextNumber").value = phone;
+
+  // Show the form if it's hidden
+  document.getElementById("addContactSection").hidden = false;
+
+  // Change the Add button to an Update button temporarily
+  const addBtn = document.querySelector("#addMe .buttons");
+  addBtn.textContent = "Update Contact";
+  addBtn.onclick = function() {
+    saveUpdatedContact(contactId);
+  };
+}
+
+function saveUpdatedContact(contactId) {
+  let firstName = document.getElementById("contactTextFirst").value;
+  let lastName = document.getElementById("contactTextLast").value;
+  let email = document.getElementById("contactTextEmail").value;
+  let phone = document.getElementById("contactTextNumber").value;
+
+    let tmp = { 
+    id: contactId, 
+    firstName: firstName, 
+    lastName: lastName, 
+    email: email, 
+    phone: phone, 
+    userId: userId 
+  };
+  let jsonPayload = JSON.stringify(tmp);
+
+  let url = urlBase + '/Update_Contact.' + extension;
+
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", url, true);
+  xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+  try {
+    xhr.onreadystatechange = function() {
+      if (this.readyState === 4 && this.status === 200) {
+        console.log("Update response:", xhr.responseText);
+        alert("Contact updated!");
+        loadContacts();
+
+        // Reset form
+        document.getElementById("addMe").reset();
+        document.getElementById("addContactSection").hidden = true;
+      }
+    };
+    xhr.send(jsonPayload);
+  } catch (err) {
+    console.error("Update error:", err.message);
+  }
 }
 
 function saveCookie()
