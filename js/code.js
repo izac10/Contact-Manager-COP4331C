@@ -486,6 +486,12 @@ function toggleAddForm() {
   if (typeof showTable !== "function") {
 	window.showTable = toggleAddForm;
 }
-  
-  
-  
+
+document.addEventListener("DOMContentLoaded", () => {
+    if (document.getElementById("contacts")) {
+        readCookie(); // make sure userId is restored
+        if (userId > 0) {
+            loadContacts(); // fetch and show contacts immediately
+        }
+    }
+});

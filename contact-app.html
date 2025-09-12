@@ -36,7 +36,6 @@
           onkeyup="searchContacts()"
           aria-label="Search contacts"
         />
-        <button class="buttons" type="button" onclick="searchContacts()">Search</button>
       </div>
 
       <button class="iconBtn" type="button" title="Refresh" onclick="loadContacts()">⟲</button>
@@ -130,6 +129,12 @@
 	  </div>
 	</div>
   </footer>
+
+  <script>
+    window.onload = function () {
+      loadContacts();
+    };
+  </script>
   
 </body>
 </html>
