@@ -8,9 +8,6 @@
   <!-- Single stylesheet for this page -->
   <link rel="stylesheet" href="css/contact-app.css" />
 
-  <!-- App script -->
-  <script defer src="js/code.js"></script>
-
 </head>
 <body>
 
@@ -36,6 +33,7 @@
           onkeyup="searchContacts()"
           aria-label="Search contacts"
         />
+        <button class="buttons" type="button" onclick="searchContacts()">Search</button>
       </div>
 
       <button class="iconBtn" type="button" title="Refresh" onclick="loadContacts()">⟲</button>
@@ -46,7 +44,7 @@
     <!-- Add contact card -->
     <section class="credentials-container" id="addContactSection" hidden>
       <h2 class="credentials-title">Add a Contact</h2>
-      <form id="addMe" action="" method="post" onsubmit="return false;">
+      <form id="addMe">
         <div class="form-grid">
           <label class="visually-hidden" for="contactTextFirst">First Name</label>
           <input id="contactTextFirst" type="text" placeholder="First Name" required />
@@ -96,6 +94,7 @@
         </thead>
         <tbody id="tbody"><!-- populated by loadContacts() --></tbody>
       </table>
+      <div id="pagination" class="pagination"></div>
     </section>
   </main>
 
@@ -130,11 +129,6 @@
 	</div>
   </footer>
 
-  <script>
-    window.onload = function () {
-      loadContacts();
-    };
-  </script>
-  
+  <script src="js/code.js"></script>
 </body>
 </html>

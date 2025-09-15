@@ -6,6 +6,10 @@ let userId = 0;
 let firstName = "";
 let lastName = "";
 
+let currentPage = 1;
+const contactsPerPage = 10; // change as needed
+let allContacts = [];       // stores contacts after load
+
 function doLogin()
 {
 	userId = 0;
@@ -180,43 +184,16 @@ function loadContacts() {
                 let tbody = document.getElementById("tbody");
                 tbody.innerHTML = "";
 
-                if (jsonObject.results && jsonObject.results.length > 0) {
-                    jsonObject.results.forEach(contact => {
-                        let row = document.createElement("tr");
-
-						row.innerHTML = `
-                            <td>${contact.FirstName}</td>
-                            <td>${contact.LastName}</td>
-                            <td>${contact.Email}</td>
-                            <td>${contact.Phone}</td>
-                            <td></td>
-                        `;
-
-						// Create Update button
-                        let updateBtn = document.createElement("button");
-                        updateBtn.textContent = "Update";
-                        updateBtn.addEventListener("click", () => {
-                            updateContact(contact.ID, contact.FirstName, contact.LastName, contact.Email, contact.Phone);
-                        });
-
-						// Create Delete button
-                        let deleteBtn = document.createElement("button");
-                        deleteBtn.textContent = "Delete";
-                        deleteBtn.addEventListener("click", () => {
-                            deleteContact(contact.ID);
-                        });
-
-						// Append buttons into the last <td>
-                        row.lastElementChild.appendChild(updateBtn);
-                        row.lastElementChild.appendChild(deleteBtn);
-            			
-						tbody.appendChild(row);
-          			});
-                } else {
-                    let row = document.createElement("tr");
-                    row.innerHTML = `<td colspan="5" style="text-align:center;">No contacts found</td>`;
-                    tbody.appendChild(row);
-                }
+				if (jsonObject.results && jsonObject.results.length > 0) {
+					allContacts = jsonObject.results;
+					console.log("Total contacts loaded:", allContacts.length); // debug
+					currentPage = 1;           // reset to first page
+					displayContacts();          // render first page
+					renderPagination();         // render pagination buttons
+				} else {
+					const tbody = document.getElementById("tbody");
+					tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No contacts found</td></tr>`;
+				}
             }
         };
         xhr.send(jsonPayload);
@@ -224,6 +201,101 @@ function loadContacts() {
     catch(err) {
         console.log("Error:", err.message);
     }
+}
+
+function displayContacts() {
+    const tbody = document.getElementById("tbody");
+    tbody.innerHTML = "";
+
+    const start = (currentPage - 1) * contactsPerPage;
+    const end = start + contactsPerPage;
+    const pageContacts = allContacts.slice(start, end);
+
+    if (pageContacts.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No contacts found</td></tr>`;
+        return;
+    }
+
+    pageContacts.forEach(contact => {
+        let row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${contact.FirstName}</td>
+            <td>${contact.LastName}</td>
+            <td>${contact.Email}</td>
+            <td>${contact.Phone}</td>
+            <td></td>
+        `;
+
+        let updateBtn = document.createElement("button");
+        updateBtn.textContent = "Update";
+        updateBtn.addEventListener("click", () => {
+            updateContact(contact.ID, contact.FirstName, contact.LastName, contact.Email, contact.Phone);
+        });
+
+        let deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.addEventListener("click", () => {
+            deleteContact(contact.ID);
+        });
+
+        row.lastElementChild.appendChild(updateBtn);
+        row.lastElementChild.appendChild(deleteBtn);
+
+        tbody.appendChild(row);
+    });
+}
+
+function renderPagination() {
+    const paginationDiv = document.getElementById("pagination");
+    if (!paginationDiv){
+		console.log("Pagination div not found!");
+		return;
+	}
+
+	console.log("Rendering pagination... allContacts.length =", allContacts.length);
+    paginationDiv.innerHTML = "";
+
+    const totalPages = Math.ceil(allContacts.length / contactsPerPage);
+    console.log("Total pages calculated:", totalPages, "Current page:", currentPage); // debug
+	
+	if (totalPages <= 1) {
+		console.log("Only one page, skipping pagination buttons");
+		return;
+	}
+
+    // Previous
+    const prevBtn = document.createElement("button");
+    prevBtn.textContent = "Previous";
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => goToPage(currentPage - 1);
+    paginationDiv.appendChild(prevBtn);
+
+    // Page numbers
+    for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement("button");
+        pageBtn.textContent = i;
+        if (i === currentPage) {
+            pageBtn.disabled = true;
+            pageBtn.classList.add("active-page");
+        }
+        pageBtn.onclick = () => goToPage(i);
+        paginationDiv.appendChild(pageBtn);
+    }
+
+    // Next
+    const nextBtn = document.createElement("button");
+    nextBtn.textContent = "Next";
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => goToPage(currentPage + 1);
+    paginationDiv.appendChild(nextBtn);
+
+	console.log("Pagination buttons rendered");
+}
+
+function goToPage(page) {
+    currentPage = page;
+    displayContacts();
+    renderPagination();
 }
 
 function searchContacts() {
