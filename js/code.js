@@ -407,6 +407,40 @@ function saveUpdatedContact(contactId) {
   }
 }
 
+function deleteContact(contactId) {
+    if (!confirm("Are you sure you want to delete this contact?")) return;
+
+    let tmp = { ID: contactId, UserID: userId };
+    let jsonPayload = JSON.stringify(tmp);
+
+    let url = urlBase + '/Delete_Contact.' + extension;
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+    try {
+        xhr.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                console.log("Delete response:", xhr.responseText);
+                let jsonObject = JSON.parse(xhr.responseText);
+
+                if (jsonObject.error && jsonObject.error !== "") {
+                    alert("Error: " + jsonObject.error);
+                    return;
+                }
+
+                alert("Contact deleted successfully!");
+                loadContacts(); // refresh table with pagination
+            }
+        };
+        xhr.send(jsonPayload);
+    }
+    catch (err) {
+        console.error("Delete error:", err.message);
+    }
+}
+
 function saveCookie()
 {
 	let minutes = 20;
