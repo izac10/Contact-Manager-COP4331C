@@ -14,9 +14,21 @@
 	else
 	{
 		//check if any field is empty
-		if($firstName === "" || $lastName === "" || $login === "" || $password === "")
+		if($firstName === "")
 		{
-			returnWithError("Empty Fields");
+			returnWithError("Missing First Name");
+		}
+		if($lastName === "")
+		{
+			returnWithError("Missing Last Name");
+		}
+		if($login === "")
+		{
+			returnWithError("Missing Login");
+		}
+		if($password === "")
+		{
+			returnWithError("Missing Password");
 		}
 		else{
 			//insert into user
@@ -48,4 +60,5 @@
 		$retValue = '{"error":"' . $err . '"}';
 		sendResultInfoAsJson( $retValue );
 	}
+
 ?>
