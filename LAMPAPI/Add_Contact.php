@@ -27,10 +27,21 @@
 	} 
 	else
 	{
-		if($firstName === "" || $lastName === "" || $email === "" || $phone === "")
-		{
-			returnWithError("Empty fields");
-		}
+		if ($firstName === "") {
+            returnWithError("Missing First Name");
+        }
+        if ($lastName === "") {
+            returnWithError("Missing Last Name");
+        }
+        if ($Phone === "") {
+            returnWithError("Empty or missing fields");
+        }
+        if ($Email === "") {
+            returnWithError("Missing Email");
+        }
+        if ($UserID == 0) {
+            returnWithError("Missing UserID");
+        }
 		else
 		{
 			$sql = "INSERT INTO Contacts (UserID, FirstName, LastName, Email, Phone) VALUES (?, ?, ?, ?, ?)";
@@ -69,4 +80,5 @@
 		$retValue = '{"success":"' . $msg . '"}';
 		sendResultInfoAsJson( $retValue );
 	}
+
 ?>
