@@ -228,12 +228,14 @@ function displayContacts() {
 
         let updateBtn = document.createElement("button");
         updateBtn.textContent = "Update";
+        updateBtn.classList.add("buttons");
         updateBtn.addEventListener("click", () => {
             updateContact(contact.ID, contact.FirstName, contact.LastName, contact.Email, contact.Phone);
         });
 
         let deleteBtn = document.createElement("button");
         deleteBtn.textContent = "Delete";
+        deleteBtn.classList.add("buttons","btn-delete");
         deleteBtn.addEventListener("click", () => {
             deleteContact(contact.ID);
         });
@@ -266,6 +268,7 @@ function renderPagination() {
     // Previous
     const prevBtn = document.createElement("button");
     prevBtn.textContent = "Previous";
+    prevBtn.classList.add("btn-pagination");
     prevBtn.disabled = currentPage === 1;
     prevBtn.onclick = () => goToPage(currentPage - 1);
     paginationDiv.appendChild(prevBtn);
@@ -273,6 +276,7 @@ function renderPagination() {
     // Page numbers
     for (let i = 1; i <= totalPages; i++) {
         const pageBtn = document.createElement("button");
+        pageBtn.classList.add("btn-pagination");
         pageBtn.textContent = i;
         if (i === currentPage) {
             pageBtn.disabled = true;
@@ -285,6 +289,7 @@ function renderPagination() {
     // Next
     const nextBtn = document.createElement("button");
     nextBtn.textContent = "Next";
+    nextBtn.classList.add("btn-pagination");
     nextBtn.disabled = currentPage === totalPages;
     nextBtn.onclick = () => goToPage(currentPage + 1);
     paginationDiv.appendChild(nextBtn);
@@ -566,22 +571,6 @@ function searchColor()
 	}
 }
 
-// This is for the footer in Contact-app.html
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".footer-toggle").forEach(btn => {
-      const box = btn.closest(".footer").querySelector(".team-members");
-      if (!box) return;
-      // start collapsed
-      btn.setAttribute("aria-expanded", "false");
-      box.classList.remove("open");
-
-      btn.addEventListener("click", () => {
-        const open = btn.getAttribute("aria-expanded") !== "true";
-        btn.setAttribute("aria-expanded", String(open));
-        box.classList.toggle("open", open);
-      });
-    });
-  });
 
 // Add contact form
 function toggleAddForm() {

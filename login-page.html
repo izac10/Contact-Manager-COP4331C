@@ -1,6 +1,8 @@
 <html>
 <head>
 	<title>Space Contact Manager</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<script type="text/javascript" src="js/md5.js"></script>
 	<script type="text/javascript" src="js/code.js"></script>
 	<script src="js/switch.js"></script>
@@ -8,12 +10,9 @@
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
 </head>
 <body>
-	<a href="/index.html">
-		<div class="home-container">
-			<img src="/images/home-icon.png" alt="Home" class="home-icon">
-			<p class="text-for-home-icon">Home</p>
-		</div>
-	</a>
+	<button class="home-btn" type="button" onclick="window.location.href='index.html'" aria-label="Home">
+		<span class="home-icon">⌂</span><span class="home-text">Go Home</span>
+	</button>
 	<div class="title-container-style">
 		<h1 class="title-style">Contact Manager</h1>
 	</div>
