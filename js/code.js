@@ -303,10 +303,22 @@ function goToPage(page) {
     renderPagination();
 }
 
-function searchContacts() {
-    let searchText = document.getElementById("searchText").value.trim();
+function searchContacts(page = 1) {
+    const searchValue = document.getElementById("searchText").value.trim();
 
-    let tmp = { search: searchText, userId: userId };
+    //search box empty, just reload normal contacts with pagination
+    if (searchValue === "") {
+        loadContacts();
+        return;
+    }
+
+    let tmp = { 
+        search: searchValue, 
+        userId: userId,
+        page: currentPage,       // NEW: send page number
+        limit: contactsPerPage   // NEW: send how many per page (10)
+    };
+
     let jsonPayload = JSON.stringify(tmp);
 
     let url = urlBase + '/SearchContacts.' + extension;
@@ -321,25 +333,45 @@ function searchContacts() {
                 console.log("Search results:", xhr.responseText);
                 let jsonObject = JSON.parse(xhr.responseText);
 
-                let tbody = document.getElementById("tbody");
+                const tbody = document.querySelector("#contacts tbody");
                 tbody.innerHTML = "";
 
                 if (jsonObject.results && jsonObject.results.length > 0) {
-                    jsonObject.results.forEach(contact => {
-                        let row = document.createElement("tr");
+                    allContacts = jsonObject.results;
 
+                    const start = (currentPage - 1) * contactsPerPage;
+                    const end = start + contactsPerPage;
+                    const pageContacts = allContacts.slice(start, end);
+
+                    pageContacts.forEach(contact => {
+                        let row = document.createElement("tr");
                         row.innerHTML = `
                             <td>${contact.FirstName}</td>
                             <td>${contact.LastName}</td>
                             <td>${contact.Email}</td>
                             <td>${contact.Phone}</td>
-                            <td>
-                                <button onclick="deleteContact(${contact.ID})">Delete</button>
-                            </td>
+                            <td></td>
                         `;
 
+                        let updateBtn = document.createElement("button");
+                        updateBtn.textContent = "Update";
+                        updateBtn.addEventListener("click", () => {
+                            updateContact(contact.ID, contact.FirstName, contact.LastName, contact.Email, contact.Phone);
+                        });
+
+                        let deleteBtn = document.createElement("button");
+                        deleteBtn.textContent = "Delete";
+                        deleteBtn.addEventListener("click", () => {
+                            deleteContact(contact.ID);
+                        });
+
+                        row.lastElementChild.appendChild(updateBtn);
+                        row.lastElementChild.appendChild(deleteBtn);
                         tbody.appendChild(row);
                     });
+                    
+                    renderPagination();
+
                 } else {
                     let row = document.createElement("tr");
                     row.innerHTML = `<td colspan="5" style="text-align:center;">No contacts found</td>`;
