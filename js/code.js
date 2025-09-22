@@ -334,7 +334,9 @@ function searchContacts() {
                             <td>${contact.Email}</td>
                             <td>${contact.Phone}</td>
                             <td>
-                                <button onclick="deleteContact(${contact.ID})">Delete</button>
+                                // this is the button update to be fix
+                                <button class=buttons onclick="updateContact(${contact.ID},${contact.FirstName}, ${contact.LastName}, ${contact.Email}, ${contact.Phone})">Update</button>
+                                <button class="buttons btn-delete" onclick="deleteContact(${contact.ID})">Delete</button>
                             </td>
                         `;
 

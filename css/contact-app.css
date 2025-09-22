@@ -274,7 +274,7 @@ tbody tr:hover {
   background: var(--table-row-hover);
 }
 .col-actions {
-  text-align: right;
+  text-align: center;
 }
 
 /* footer and team */
@@ -438,7 +438,7 @@ tbody tr:hover {
   background: #a41d38;
 }
 .btn-delete:hover {
-  background: #a10121;
+  background: #ff0033;
 }
 
 .btn-pagination:disabled {
