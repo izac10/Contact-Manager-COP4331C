@@ -31,6 +31,17 @@
 		{
 			returnWithError("Empty fields");
 		}
+		
+        elseif (!filter_var($email, FILTER_VALIDATE_EMAIL))
+        {
+            returnWithError("Invalid email format");
+        }
+		
+        elseif (!preg_match('/^\d{10}$/', $phone))
+        {
+            returnWithError("Phone must be 10 digits");
+        }
+		
 		else
 		{
 			$sql = "INSERT INTO Contacts (UserID, FirstName, LastName, Email, Phone) VALUES (?, ?, ?, ?, ?)";

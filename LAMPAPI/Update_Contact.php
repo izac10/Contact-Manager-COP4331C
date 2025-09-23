@@ -8,6 +8,15 @@
     $phone = $inData["phone"];
     $userId = $inData["userId"];
 
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        returnWithError("Invalid email format");
+    }
+
+    if (!preg_match('/^\d{10}$/', $phone)) {
+        returnWithError("Phone number must be exactly 10 digits");
+    }
+
+
     $conn = new mysqli("localhost", "TheBeast", "WeLoveCOP4331", "COP4331");
 
     if ($conn->connect_error) 
