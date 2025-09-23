@@ -11,22 +11,27 @@
     } 
     else
     {
-        //first and last name
-        $sql = "SELECT firstName, lastName, Email, Phone, ID 
-                FROM Contacts 
-                WHERE (firstName LIKE '%" . $inData["search"] . "%' 
-                    OR lastName LIKE '%" . $inData["search"] . "%')
-                AND UserID=" . $inData["userId"];
+        $search = "%" . $inData["search"] . "%";
+        $userId = intval($inData["userId"]);
 
-        $result = $conn->query($sql);
+        $stmt = $conn->prepare("
+            SELECT FirstName, LastName, Email, Phone, ID
+            FROM Contacts
+            WHERE (FirstName LIKE ? OR LastName LIKE ? OR Email LIKE ? OR Phone LIKE ?)
+            AND UserID = ?
+        ");
+
+        $stmt->bind_param("ssssi", $search, $search, $search, $search, $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         if ($result->num_rows > 0)
         {
             while($row = $result->fetch_assoc())
             {
                 $searchResults[] = array(
-                    "FirstName" => $row["firstName"],
-                    "LastName"  => $row["lastName"],
+                    "FirstName" => $row["FirstName"], // uppercase F
+                    "LastName"  => $row["LastName"],  // uppercase L
                     "Email"     => $row["Email"],
                     "Phone"     => $row["Phone"],
                     "ID"        => $row["ID"]
@@ -39,6 +44,7 @@
             returnWithError("No Records Found");
         }
 
+        $stmt->close();
         $conn->close();
     }
 
