@@ -381,25 +381,19 @@ function searchContacts(page = 1) {
                             <td>${contact.LastName}</td>
                             <td>${contact.Email}</td>
                             <td>${contact.Phone}</td>
-<<<<<<< HEAD
-                            <td>
-                                // this is the button update to be fix
-                                <button class=buttons onclick="updateContact(${contact.ID},${contact.FirstName}, ${contact.LastName}, ${contact.Email}, ${contact.Phone})">Update</button>
-                                <button class="buttons btn-delete" onclick="deleteContact(${contact.ID})">Delete</button>
-                            </td>
-=======
                             <td></td>
->>>>>>> 80b35948ab5f4f394090a2072488982b140f3178
                         `;
 
                         let updateBtn = document.createElement("button");
                         updateBtn.textContent = "Update";
+                        updateBtn.classList.add("buttons");
                         updateBtn.addEventListener("click", () => {
                             updateContact(contact.ID, contact.FirstName, contact.LastName, contact.Email, contact.Phone);
                         });
 
                         let deleteBtn = document.createElement("button");
                         deleteBtn.textContent = "Delete";
+                        deleteBtn.classList.add("buttons","btn-delete");
                         deleteBtn.addEventListener("click", () => {
                             deleteContact(contact.ID);
                         });
