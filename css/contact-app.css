@@ -45,6 +45,7 @@ body {
 
 /* Logout button */
 .logout-btn {
+  font-family: "Orbitron", sans-serif;
   position: absolute;
   top: 40px;
   left: 30px;
@@ -209,6 +210,7 @@ body {
   gap: 10px;
 }
 .buttons {
+  font-family: "Orbitron", sans-serif;
   padding: 10px 16px;
   border: none;
   border-radius: 10px;
@@ -420,6 +422,7 @@ tbody tr:hover {
 }
 /* Paginatiion buttons */
 .btn-pagination {
+  font-family: "Orbitron", sans-serif;
   padding: 8px 10px;
   border: none;
   border-radius: 10px;
@@ -435,6 +438,7 @@ tbody tr:hover {
   background: var(--space-cyan);
 }
 .btn-delete {
+  font-family: "Orbitron", sans-serif;
   background: #a41d38;
 }
 .btn-delete:hover {

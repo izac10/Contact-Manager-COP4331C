@@ -69,6 +69,7 @@ body {
 
 /* Home icon style */
 .home-btn {
+  font-family: "Orbitron", sans-serif;
   position: absolute;  
   top: 40px;
   left: 30px;
@@ -164,6 +165,7 @@ body {
 }
   
 .buttons {
+    font-family: "Orbitron", sans-serif;
     padding: 10px 20px;
     margin-top: 10px;
     border: none;
@@ -192,12 +194,14 @@ body {
 }
   
 .switch-text {
+  font-family: "Orbitron", sans-serif;
     margin-top: 15px;
     color: #ddd;
     font-size: 16px;
 }
   
 .switch-btn {
+    font-family: "Orbitron", sans-serif;
     font-size: 14px;
     background: transparent;
     border: none;
