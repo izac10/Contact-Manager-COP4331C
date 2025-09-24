@@ -10,6 +10,16 @@ let currentPage = 1;
 const contactsPerPage = 10; // change as needed
 let allContacts = [];       // stores contacts after load
 
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+function isValidPhone(phone) {
+    const phoneRegex = /^\d{10}$/;  // exactly 10 digits
+    return phoneRegex.test(phone);
+}
+
 function doLogin()
 {
 	userId = 0;
@@ -107,14 +117,35 @@ function doSignup()
 }
 
 function addContact() {
-	readCookie(); // make sure userId is up to date
+    console.log("addContact() called");
+    readCookie(); // make sure userId is up to date
 
 	let firstName = document.getElementById("contactTextFirst").value.trim();
 	let lastName = document.getElementById("contactTextLast").value.trim();
 	let email = document.getElementById("contactTextEmail").value.trim();
+    console.log("Email entered:", email);
+
 	let phone = document.getElementById("contactTextNumber").value.trim();
-  
-	// Clear result area (we can add a <div id="contactAddResult"> later if needed)
+
+    if (!firstName || !lastName) {
+        alert("Please enter both first and last names.");
+        return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    console.log("Email valid?", emailRegex.test(email));
+    if (!emailRegex.test(email)) {
+        alert("Please enter a valid email in the format name@domain.com");
+        return;
+    }
+
+    // Phone number: only digits, exactly 10 digits
+    const phoneDigits = phone.replace(/\D/g, ""); // remove non-digit chars
+    if (phoneDigits.length !== 10) {
+        alert("Please enter a valid 10-digit phone number");
+        return;
+    }
+
 	console.log("Adding contact:", firstName, lastName, email, phone);
   
 	document.getElementById("addContactResult")?.remove();
@@ -127,7 +158,7 @@ function addContact() {
 	  FirstName: firstName,
 	  LastName: lastName,
 	  Email: email,
-	  Phone: phone,
+	  Phone: phoneDigits,
 	  UserId: userId
 	};
 
@@ -303,10 +334,22 @@ function goToPage(page) {
     renderPagination();
 }
 
-function searchContacts() {
-    let searchText = document.getElementById("searchText").value.trim();
+function searchContacts(page = 1) {
+    const searchValue = document.getElementById("searchText").value.trim();
 
-    let tmp = { search: searchText, userId: userId };
+    //search box empty, just reload normal contacts with pagination
+    if (searchValue === "") {
+        loadContacts();
+        return;
+    }
+
+    let tmp = { 
+        search: searchValue, 
+        userId: userId,
+        page: currentPage,       // NEW: send page number
+        limit: contactsPerPage   // NEW: send how many per page (10)
+    };
+
     let jsonPayload = JSON.stringify(tmp);
 
     let url = urlBase + '/SearchContacts.' + extension;
@@ -321,27 +364,53 @@ function searchContacts() {
                 console.log("Search results:", xhr.responseText);
                 let jsonObject = JSON.parse(xhr.responseText);
 
-                let tbody = document.getElementById("tbody");
+                const tbody = document.querySelector("#contacts tbody");
                 tbody.innerHTML = "";
 
                 if (jsonObject.results && jsonObject.results.length > 0) {
-                    jsonObject.results.forEach(contact => {
-                        let row = document.createElement("tr");
+                    allContacts = jsonObject.results;
 
+                    const start = (currentPage - 1) * contactsPerPage;
+                    const end = start + contactsPerPage;
+                    const pageContacts = allContacts.slice(start, end);
+
+                    pageContacts.forEach(contact => {
+                        let row = document.createElement("tr");
                         row.innerHTML = `
                             <td>${contact.FirstName}</td>
                             <td>${contact.LastName}</td>
                             <td>${contact.Email}</td>
                             <td>${contact.Phone}</td>
+<<<<<<< HEAD
                             <td>
                                 // this is the button update to be fix
                                 <button class=buttons onclick="updateContact(${contact.ID},${contact.FirstName}, ${contact.LastName}, ${contact.Email}, ${contact.Phone})">Update</button>
                                 <button class="buttons btn-delete" onclick="deleteContact(${contact.ID})">Delete</button>
                             </td>
+=======
+                            <td></td>
+>>>>>>> 80b35948ab5f4f394090a2072488982b140f3178
                         `;
 
+                        let updateBtn = document.createElement("button");
+                        updateBtn.textContent = "Update";
+                        updateBtn.addEventListener("click", () => {
+                            updateContact(contact.ID, contact.FirstName, contact.LastName, contact.Email, contact.Phone);
+                        });
+
+                        let deleteBtn = document.createElement("button");
+                        deleteBtn.textContent = "Delete";
+                        deleteBtn.addEventListener("click", () => {
+                            deleteContact(contact.ID);
+                        });
+
+                        row.lastElementChild.appendChild(updateBtn);
+                        row.lastElementChild.appendChild(deleteBtn);
                         tbody.appendChild(row);
                     });
+                    
+                    renderPagination();
+
                 } else {
                     let row = document.createElement("tr");
                     row.innerHTML = `<td colspan="5" style="text-align:center;">No contacts found</td>`;
@@ -375,33 +444,45 @@ function updateContact(contactId, firstName, lastName, email, phone) {
 }
 
 function saveUpdatedContact(contactId) {
-  let firstName = document.getElementById("contactTextFirst").value;
-  let lastName = document.getElementById("contactTextLast").value;
-  let email = document.getElementById("contactTextEmail").value;
-  let phone = document.getElementById("contactTextNumber").value;
+    let firstName = document.getElementById("contactTextFirst").value;
+    let lastName = document.getElementById("contactTextLast").value;
+    let email = document.getElementById("contactTextEmail").value;
+    let phone = document.getElementById("contactTextNumber").value;
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert("Please enter a valid email in the format name@domain.com");
+        return;
+    }
+
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (phoneDigits.length !== 10) {
+        alert("Please enter a valid 10-digit phone number");
+        return;
+    }
 
     let tmp = { 
-    id: contactId, 
-    firstName: firstName, 
-    lastName: lastName, 
-    email: email, 
-    phone: phone, 
-    userId: userId 
+        id: contactId, 
+        firstName: firstName, 
+        lastName: lastName, 
+        email: email, 
+        phone: phone, 
+        userId: userId 
   };
-  let jsonPayload = JSON.stringify(tmp);
+    let jsonPayload = JSON.stringify(tmp);
 
-  let url = urlBase + '/Update_Contact.' + extension;
+    let url = urlBase + '/Update_Contact.' + extension;
 
-  let xhr = new XMLHttpRequest();
-  xhr.open("POST", url, true);
-  xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
-  try {
-    xhr.onreadystatechange = function() {
-      if (this.readyState === 4 && this.status === 200) {
-        console.log("Update response:", xhr.responseText);
-        alert("Contact updated!");
-        loadContacts();
+    try {
+        xhr.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+            console.log("Update response:", xhr.responseText);
+            alert("Contact updated!");
+            loadContacts();
 
         // Reset form
         document.getElementById("addMe").reset();

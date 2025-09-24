@@ -27,6 +27,7 @@
 	} 
 	else
 	{
+<<<<<<< HEAD
 		if ($firstName === "") {
             returnWithError("Missing First Name");
         }
@@ -42,6 +43,23 @@
         if ($UserID == 0) {
             returnWithError("Missing UserID");
         }
+=======
+		if($firstName === "" || $lastName === "" || $email === "" || $phone === "")
+		{
+			returnWithError("Empty fields");
+		}
+		
+        elseif (!filter_var($email, FILTER_VALIDATE_EMAIL))
+        {
+            returnWithError("Invalid email format");
+        }
+		
+        elseif (!preg_match('/^\d{10}$/', $phone))
+        {
+            returnWithError("Phone must be 10 digits");
+        }
+		
+>>>>>>> 80b35948ab5f4f394090a2072488982b140f3178
 		else
 		{
 			$sql = "INSERT INTO Contacts (UserID, FirstName, LastName, Email, Phone) VALUES (?, ?, ?, ?, ?)";
